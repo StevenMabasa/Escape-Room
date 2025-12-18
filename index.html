@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Escape Room Game</title>
+  <link rel="stylesheet" href="./public/index.css">
+  <style>
+    /* Custom popup styles */
+    #musicPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 1.5rem;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    #musicPopup button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #ff9900;
+      color: #fff;
+      transition: 0.2s;
+    }
+    #musicPopup button:hover {
+      background: #ff7700;
+    }
+  </style>
+</head>
+<body>
+  <img class="img-gradient" src="./public/gradient.png" alt="gradient" />
+  <div class="layer-blur"></div>
+
+  <div class="container">
+    <header>
+      <h1 class="logo">YOU</h1>
+
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Improvements</a>
+      </nav>
+
+      <a class="room1" href="#" id="startButton">START</a>
+
+    </header>
+
+    <main>
+      <div class="content">
+        <div class="tag-box">
+          <div class="tag">GOT Enough brain cells? &wedbar;</div>
+        </div>
+        <h1>We got Something for YOU and...<br> Your Brain Too</h1>
+        <p class="description">
+          You will indulge in several puzzles that will test your mental and physical abilities<br>
+          This is an Environment designed for YOU
+        </p>
+      </div>
+    </main>
+
+    <spline-viewer class="robot" url="https://prod.spline.design/IGhNCQQwOgbIXJr7/scene.splinecode"></spline-viewer>
+  </div>
+
+  <!-- Audio element -->
+  <audio id="backgroundMusic" src="./public/assets/star.mp3" loop></audio>
+
+  <!-- Music choice popup -->
+  <div id="musicPopup">
+    <p>Do you want background music?</p>
+    <div>
+      <button id="yesMusic">Yes</button>
+      <button id="noMusic">No</button>
+    </div>
+  </div>
+
+  <!-- Intro video popup -->
+  <div id="videoContainer" style="
+    display:none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:black;
+    z-index:10000;
+    justify-content:center;
+    align-items:center;
+  ">
+    <video id="introVideo" style="width:100%; height:100%; object-fit:cover;">
+      <source src="./public/gameintro.mp4" type="video/mp4">
+    </video>
+  </div>
+
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.76/build/spline-viewer.js"></script>
+
+  <script>
+    const audio = document.getElementById('backgroundMusic');
+    const startButton = document.getElementById('startButton');
+    const musicPopup = document.getElementById('musicPopup');
+    const yesMusic = document.getElementById('yesMusic');
+    const noMusic = document.getElementById('noMusic');
+
+    const videoContainer = document.getElementById('videoContainer');
+    const introVideo = document.getElementById('introVideo');
+
+    // User chooses to play music
+    yesMusic.addEventListener('click', () => {
+      audio.play();
+      musicPopup.style.display = 'none';
+    });
+
+    // User chooses no music
+    noMusic.addEventListener('click', () => {
+      musicPopup.style.display = 'none';
+    });
+
+    // Start button logic
+    startButton.addEventListener('click', (e) => {
+      e.preventDefault(); // Stop instant navigation
+
+      // Stop music
+      audio.pause();
+      audio.currentTime = 0;
+
+      // Show video screen and play
+      videoContainer.style.display = 'flex';
+      introVideo.play();
+
+      // When video ends, go to game
+      introVideo.onended = () => {
+        window.location.href = "./public/game.html";
+      };
+
+    
+    });
+
+  </script>
+</body>
+</html>

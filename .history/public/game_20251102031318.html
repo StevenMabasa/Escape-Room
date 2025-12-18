@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room</title>
+    <link rel="stylesheet" href="./ui.css">
+</head>
+<body>
+    <!-- Time UI -->
+    <section class="info">
+        <section id="time-ui">--:--</section>
+        <section class="inventory" id="key">KEY:<span id="keys">0</span></section>
+        <section class="pause_resume" id="menu">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+            </svg>
+        </section>
+        <section class="level" id="level">LEVEL :<span id="levels">0</span></section>
+        <section id="interaction-ui" class="interaction-ui">Press E to unlock the door</section>
+        <section id="no_key" class="interaction-ui">Find a KEY to unlock the door</section>
+        <section id="time_up">
+            <div>TIME UP</div>
+            <button id="restart">Restart</button>
+            <a id="quit" href="/menu">Quit</a>
+        </section>
+
+        <!-- Fade overlay -->
+        <div id="fade-overlay" style="
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background-color:black;
+            opacity:0;
+            pointer-events:none;
+            transition: opacity 1s ease;
+            z-index: 1000;
+        "></div>
+    </section>
+
+    <!-- Paused Overlay -->
+    <section id="paused-overlay">PAUSED</section>
+    <!-- Time out picture -->
+    <section id="caught_timeup"><img src="caught.png" alt="Caught Time Up"></section>
+
+    <!-- Instruction Overlay -->
+    <section id="instruction-overlay">
+        <div id="instruction-content">
+            <h2>Welcome to the Game!</h2>
+            <p><strong>Objective:</strong> Find the key by solving the puzzle in the room before time runs out.</p>
+            <p><strong>Controls:</strong></p>
+            <ul>
+                <li><strong>Move:</strong> WASD</li>
+                <li><strong>Look Around:</strong> Mouse</li>
+                <li><strong>Switch View:</strong> V</li>
+            </ul>
+            <p><em>Tip: Switch to first-person view to solve puzzles more efficiently.</em></p>
+            <button id="start-game">Start</button>
+        </div>
+    </section>
+
+    <!-- Hidden background music -->
+<audio id="roomMusic" src="assets/chil.mp3" loop></audio>
+
+<script>
+  const audio = document.getElementById("roomMusic");
+
+  // Set volume to 50%
+  audio.volume = 0.2;
+</script>
+
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.76/build/spline-viewer.js"></script>
+    <script type="module" src="../src/main.js"></script>
+    <script src="../src/UI/HUD.js"></script>
+
+    <script>
+        const roomMusic = document.getElementById('roomMusic');
+        const startGameButton = document.getElementById('start-game');
+
+        startGameButton.addEventListener('click', () => {
+            // Hide the instruction overlay
+            document.getElementById('instruction-overlay').style.display = 'none';
+
+            // Play the background music (hidden)
+            roomMusic.play().catch(err => {
+                console.log('Music blocked by browser autoplay policy.');
+            });
+        });
+
+        // Stop music when restarting or quitting
+        const stopMusic = () => {
+            roomMusic.pause();
+            roomMusic.currentTime = 0;
+        };
+        document.getElementById('restart').addEventListener('click', stopMusic);
+        document.getElementById('quit').addEventListener('click', stopMusic);
+    </script>
+</body>
+</html>
